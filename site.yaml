@@ -86,7 +86,6 @@
       apt:
            name: nginx
            state: latest
-           force_apt_get: yes
     - name: "Configuring UDP loadbalancing"  
       template:
            src: "./nginx.j2"
