@@ -1,1 +1,97 @@
+---
+-
 
+
+  hosts: webservers
+  become: true
+
+  tasks:
+
+    - name: Update apt cache
+      become: true
+      apt:
+        update_cache: true
+
+
+    - name: pip3 install
+      become: true
+      apt:
+          name: python3-pip
+          state: present
+          update_cache: true
+    
+    - name: "installing gunicorn"
+      apt:
+          name: gunicorn
+
+    - name: install flask
+      pip: name=flask
+
+
+    - name: "installing snmpd"
+      apt:
+          name: snmpd
+          state: latest
+    - name: "Configuring snmpd" 
+      template:
+           src: "./snmpd.conf"
+           dest: "/etc/snmp/snmpd.conf"
+    
+    - name: "restarting snmpd"
+      service:
+           name: snmpd
+           state: restarted
+           enabled: yes
+    
+    - name: copying the code 
+      copy: 
+           src: application2.py 
+           dest: /application2.py
+
+    - name: "Running Flask app"
+      shell: gunicorn -w 2 -D -b 0.0.0.0:8080 application2:app
+
+
+# haproxy configuration
+
+- hosts: all
+  gather_facts: yes
+- hosts: HAproxy
+  become: yes
+
+  tasks:
+
+    - name: update apt cache
+      become: true
+      apt:
+           update_cache: true
+
+    - name: install haproxy
+      become: true
+      apt:
+           name: haproxy
+           state: latest
+
+    - name: deploy new haproxy configuration
+      template:
+           src: /$PWD/haproxy.cfg.j2
+           dest: "/etc/haproxy/haproxy.cfg"
+
+    - name: Haproxy reinitiation
+      service:
+           name: haproxy
+           state: restarted
+
+    - name: "installing Nginx"
+      apt:
+           name: nginx
+           state: latest
+           force_apt_get: yes
+    - name: "Configuring UDP loadbalancing"  
+      template:
+           src: "./nginx.j2"
+           dest: "/etc/nginx/nginx.conf"
+    - name: "restarting nginx"
+      service:
+           name: nginx
+           state: restarted
