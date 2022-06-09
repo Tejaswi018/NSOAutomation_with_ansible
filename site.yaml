@@ -20,7 +20,7 @@
           state: present
           update_cache: true
     
-    - name: "installing gunicorn"
+    - name: "install gunicorn"
       apt:
           name: gunicorn
 
@@ -28,16 +28,16 @@
       pip: name=flask
 
 
-    - name: "installing snmpd"
+    - name: "install snmpd"
       apt:
           name: snmpd
           state: latest
-    - name: "Configuring snmpd" 
+    - name: "Configure snmpd" 
       template:
            src: "./snmpd.conf"
            dest: "/etc/snmp/snmpd.conf"
     
-    - name: "restarting snmpd"
+    - name: "restart snmpd"
       service:
            name: snmpd
            state: restarted
@@ -48,7 +48,7 @@
            src: application2.py 
            dest: /application2.py
 
-    - name: "Running Flask app"
+    - name: "Run Flask app"
       shell: gunicorn -w 2 -D -b 0.0.0.0:8080 application2:app
 
 
@@ -82,15 +82,15 @@
            name: haproxy
            state: restarted
 
-    - name: "installing Nginx"
+    - name: "install Nginx"
       apt:
            name: nginx
            state: latest
-    - name: "Configuring UDP loadbalancing"  
+    - name: "Configure UDP loadbalancing"  
       template:
            src: "./nginx.j2"
            dest: "/etc/nginx/nginx.conf"
-    - name: "restarting nginx"
+    - name: "restart nginx"
       service:
            name: nginx
            state: restarted
