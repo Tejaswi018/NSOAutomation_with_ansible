@@ -1,4 +1,4 @@
-Host bastionNSO
+Host bastionET2598
          HostName ip_address
          ForwardAgent yes
          user ubuntu
@@ -14,7 +14,7 @@ Host HAproxy
          user ubuntu
          IdentityFile ~/.ssh/test
          StrictHostKeyChecking no 
-         ProxyCommand ssh -W %h:%p bastionNSO
+         ProxyCommand ssh -W %h:%p bastionET2598
          
 Host devA 
          HostName ip_address
@@ -22,7 +22,7 @@ Host devA
          user ubuntu
          IdentityFile ~/.ssh/test
          StrictHostKeyChecking no 
-         ProxyCommand ssh -W %h:%p bastionNSO
+         ProxyCommand ssh -W %h:%p bastionET2598
          
 Host devB
          HostName ip_address
@@ -30,7 +30,7 @@ Host devB
          user ubuntu
          IdentityFile ~/.ssh/test
          StrictHostKeyChecking no 
-         ProxyCommand ssh -W %h:%p bastionNSO
+         ProxyCommand ssh -W %h:%p bastionET2598
          
 Host devC
          HostName ip_address
@@ -38,4 +38,4 @@ Host devC
          user ubuntu
          IdentityFile ~/.ssh/test
          StrictHostKeyChecking no 
-         ProxyCommand ssh -W %h:%p bastionNSO
+         ProxyCommand ssh -W %h:%p bastionET2598
